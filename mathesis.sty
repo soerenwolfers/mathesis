@@ -1,0 +1,200 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{mathesis}
+\RequirePackage[l2tabu, orthodox]{nag}
+\RequirePackage{etoolbox}
+\usepackage[utf8]{inputenc}
+
+%% SORT %%
+
+%% PROCESS OPTIONS
+\usepackage{pgfkeys}
+\usepackage{pgfopts}
+
+\pgfkeys{
+	/mathesis/.cd,
+	biblatex/.store in = \mathesis@biblatex,
+	bib/.store in = \mathesis@bib,
+	initials/.store in = \mathesis@initials,
+	initials=ma,
+}
+\ProcessPgfPackageOptions*
+
+
+%% SET STRUCTURE
+% Automatic Bibliography with entry in TOC
+\ifdef{\mathesis@biblatex}{
+	\ifdef{\mathesis@bib}{
+		\usepackage[backend=bibtex,url=false,isbn=false,doi=false,firstinits=true,maxbibnames=99,style=numeric]{biblatex}
+		\addbibresource{\mathesis@bib}
+		\@ifclassloaded{book}{
+			\AtEndEnvironment{document}{\printbibliography[heading=bibintoc]}{}{}%\cleardoublepage\addcontentsline{toc}{chapter}{\bibname}
+		}{
+			\AtEndEnvironment{document}{\addcontentsline{toc}{section}{\refname}\printbibliography[maxnames=99]}{}{}
+		}
+	}{}
+}{
+	\ifdef{\mathesis@bib}{
+	 \AtEndEnvironment{document}{\bibliography{\mathesis@bib}{}\bibliographystyle{plain}}
+	}{}
+}
+%% SET LAYOUT AND LOOKS
+%Page size
+\@ifclassloaded{book}{
+	\usepackage[inner=1.4in, outer=1.1in]{geometry}	
+}{
+	\usepackage[bottom=1in, top=1.5in,right=2cm,left=2cm]{geometry}
+}
+% Headers and footers
+\usepackage{fancyhdr}
+\fancyhead{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[C]{\thepage} 
+\usepackage{setspace}
+
+% Chapter headings
+\@ifclassloaded{book}{
+	\usepackage{titlesec}
+	\titleformat{\chapter}[display]{\normalfont\huge\bfseries}{}{0pt}{\Huge}%Put stuff before title in last brackets
+	\titlespacing*{\chapter} {0pt}{20pt}{40pt}
+}{}
+
+% Figures
+\usepackage[labelfont=bf]{caption}
+\usepackage{scalerel}
+\captionsetup[algorithm]{labelfont=rm,labelsep=period}
+\usepackage{subcaption}
+
+
+% Typography
+\usepackage{microtype}
+\usepackage{lmodern}
+\usepackage[USenglish]{babel}
+\usepackage[T1]{fontenc}
+
+% Links
+\usepackage{hyperref}
+
+% Float placement
+\usepackage{flafter}
+
+
+%% PROVIDE STRUCTURE COMMANDS
+% Theorems. Note that the actual definitions need to be after cleverref according to the documentaiton of cleverref.
+\usepackage{amsthm} 
+
+% Abstract 
+\@ifclassloaded{book}{
+\newenvironment{abstract}% 
+{\clearpage\null \vfill\begin{center}% Erste Klammer enthaelt was an den Anfang kommt
+		\bfseries \abstractname \end{center}}% 
+{\vfill\null}%, die zweite was an den Schluss kommt.
+}
+
+% Emphasized matter by frame with left bar
+\usepackage{framed}
+\renewenvironment{leftbar}[1][\hsize]%
+{%
+	\def\FrameCommand%
+	{%    
+		\vrule width 3pt \hspace{-4pt}              
+		\fboxsep=\FrameSep\colorbox{Lavender!25}%
+	}%
+	\MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}%
+}%
+{\endMakeFramed}
+
+% Align with left tags
+\usepackage{environ}
+\NewEnviron{Lalign}{\tagsleft@true\begin{align}\BODY\end{align}}
+
+% Blank page
+\newcommand{\blankpage}{\clearpage\mbox{}\thispagestyle{empty}\clearpage}
+
+%% PROVIDE MORE COMMANDS AND PACKAGES
+% Math 
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{madefs}%
+
+% Algorithms
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% Various
+\usepackage{blindtext}
+
+% Graphics
+\usepackage{pgfplots,tikz}
+\usetikzlibrary{matrix,arrows}
+\usepackage{epstopdf}
+
+% Counting
+\usepackage{chngcntr}
+
+% Float placement
+\usepackage{afterpage}
+
+% Various
+\usepackage{etoolbox}% Needed for \pretocmd{\chapter} %% CHECK USAGE
+\usepackage{bm} %Bold math symbols. Just as good as textbf and mathbf. Never use bfseries
+\usepackage{bbm} %Blackboard Numbers \mathbbm{1}
+\usepackage{csquotes} %\enquote 
+\usepackage{enumerate} % change to enumitem
+
+% Structuring 
+\usepackage{appendix} %%CHECK USAGE
+
+% Typing superscript numbers
+\usepackage{nth}
+
+% Typing Roman Numbers
+\newcommand{\romath}[1]{%
+  \textup{\uppercase\expandafter{\romannumeral#1}} % Roman numbers from input
+}
+
+% Adding
+\newcommand\add[2]{\the\numexpr(#1)+(#2)\relax}
+
+% Referencing
+\usepackage[capitalize]{cleveref}
+%\renewcommand{\cref}{\Cref}
+
+%% Annotations
+\usepackage[mode=multiuser]{fixme}
+\fxsetup{layout=pdfcsignote,targetlayout=color} 
+\FXRegisterAuthor{\mathesis@initials}{an\mathesis@initials}{\mathesis@initials}
+\crefname{definition}{Definition}{Definitions}
+\crefname{rem}{Remark}{Remarks}
+\crefname{cor}{Corollary}{Corollaries}
+\crefname{thm}{Theorem}{Theorems}
+\crefname{alg}{Algorithm}{Algorithms}
+\crefname{lem}{Lemma}{Lemmas}
+\crefname{exa}{Example}{Examples}
+\crefname{pro}{Proposition}{Propositions}
+\crefname{defpro}{Definition and Proposition}{}
+\crefname{equation}{Equation}{Equations}
+
+%Theorem definitions
+\theoremstyle{plain}
+\@ifclassloaded{book}{
+	\newtheorem{definition}{Definition}[chapter]
+}{
+	\newtheorem{definition}{Definition}[section]
+}
+\newtheorem{rem}{Remark}
+\newtheorem{exa}{Example}
+\theoremstyle{plain}
+\newtheorem{cor}[definition]{Corollary}
+\newtheorem{thm}[definition]{Theorem}
+\newtheorem{alg}[definition]{Algorithm}
+\newtheorem{lem}[definition]{Lemma}
+\newtheorem{pro}[definition]{Proposition}
+\newtheorem{defpro}[definition]{Definition and Proposition}
+
+%% Miscellaneous
+\newcommand{\condinput}[1]{
+	\ifcsname#1\endcsname%
+	\input{#1}
+	\fi%
+}

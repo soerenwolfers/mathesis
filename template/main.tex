@@ -1,0 +1,38 @@
+\documentclass[11pt,a4paper,status=draft]{article}
+\usepackage[bib=library,initials=sw]{mathesis}
+
+\date{\today}
+
+\author{
+	{\large  Sören Wolfers\footnote{Corresponding author. Email address: \texttt{soeren.wolfers@gmail.com}}}\\
+	{\small  King Abdullah University of Science and Technology (KAUST), Applied Mathematics and Computational Science}\\
+}
+
+\title{The \text{mathesis} package}
+
+\begin{document}
+\maketitle
+\abstract{This document describes the LaTeX package \texttt{mathesis}, which summarizes frequently used packages for mathematical publications. It also serves as a template for such publications.  
+\newline
+
+ \textbf{Keywords} LaTeX, Packages, 
+ }
+ 
+ %% INTRODUCTORY PAGES
+\pagenumbering{roman}
+\pagestyle{headings}
+%\pdfbookmark{\contentsname}{toc}
+%\tableofcontents
+
+%% MAIN PART
+\pagenumbering{arabic}
+\input{content/introduction.tex}
+\input{content/usage.tex}
+\input{content/features.tex}
+
+\clearpage
+%\listoffigures
+\clearpage
+\listoffixmes
+ 
+\end{document}
