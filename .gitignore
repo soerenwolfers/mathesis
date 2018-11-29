@@ -7,3 +7,8 @@
 *.upa
 *.upb
 *.log
+*.xml
+*.toc
+*.bbl
+*.blg
+*.bib
