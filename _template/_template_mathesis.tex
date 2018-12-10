@@ -1,13 +1,12 @@
 \documentclass[11pt,a4paper,status=draft]{article}
-\begin{filecontents*}{bibmathesis.bib}
+\begin{filecontents*}{_bib_mathesis.bib}
 	@Book{AdamsFournier2003,
 		Title                    = {Sobolev spaces},
 		Author                   = {Adams, Robert A and Fournier, John JF},
 		Year                     = {2003},
 	}
 \end{filecontents*}
-\usepackage[bib=bibmathesis,initials=sw]{mathesis}
-
+\usepackage[bib=_bib_mathesis,initials=sw]{mathesis}
 
 \date{\today}
 \author{
@@ -17,10 +16,10 @@
 
 \begin{document}
 \maketitle
-\abstract{This document describes the LaTeX package \texttt{mathesis}, which summarizes frequently used packages for mathematical publications. It also serves as a template for such publications.  
-\newline
+\abstract{%
+    This document describes the LaTeX package \texttt{mathesis}, which summarizes frequently used packages for mathematical publications. It also serves as a template for such publications.
 
- \textbf{Keywords} LaTeX, packages
+    \textbf{Keywords} LaTeX, packages
  }
  
 %%%% Introductory pages %%%%
@@ -31,9 +30,9 @@
 
 %%%% Main part %%%%
 \pagenumbering{arabic}
-\input{content/introduction.tex}
-\input{content/usage.tex}
-\input{content/features.tex}
+\input{_content/_introduction.tex}
+\input{_content/_usage.tex}
+\input{_content/_features.tex}
 
 \clearpage
 \listoffixmes
